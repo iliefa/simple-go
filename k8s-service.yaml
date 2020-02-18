@@ -4,16 +4,8 @@ metadata:
   creationTimestamp: null
   labels:
     app: gohello
-    app.kubernetes.io/managed-by: skaffold-v1.3.1
-    skaffold.dev/builder: local
-    skaffold.dev/cleanup: "true"
-    skaffold.dev/deployer: kubectl
-    skaffold.dev/docker-api-version: "1.40"
-    skaffold.dev/run-id: 315a7419-a25d-48d5-b160-aa77bc9ae0ef
-    skaffold.dev/tag-policy: git-commit
     skaffold.dev/tail: "true"
   name: gohello
-  selfLink: /api/v1/namespaces/default/services/gohello
 spec:
   externalTrafficPolicy: Cluster
   ports:
@@ -24,5 +16,3 @@ spec:
     app: gohello
   sessionAffinity: None
   type: NodePort
-status:
-  loadBalancer: {}
