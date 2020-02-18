@@ -26,8 +26,25 @@ func getEnv(key, fallback string) string {
 func wrapHandlerWithLogging(wrapperHandler http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		log.Printf("--> %s %s", req.Method, req.URL.Path)
-		wrapperHandler.ServeHTTP(w, req)
+		lrw := NewLoggingResponseWriter(w)
+		wrapperHandler.ServeHTTP(lrw, req)
+		statusCode := lrw.statusCode
+		log.Printf("<-- %d %s", statusCode, http.StatusText(statusCode))
 	})
+}
+
+type loggingResponseWriter struct {
+	http.ResponseWriter
+	statusCode int
+}
+
+func NewLoggingResponseWriter(w http.ResponseWriter) *loggingResponseWriter {
+	return &loggingResponseWriter{w, http.StatusOK}
+}
+
+func (lrw *loggingResponseWriter) WriteHeader(code int) {
+	lrw.statusCode = code
+	lrw.ResponseWriter.WriteHeader(code)
 }
 func main() {
 	//	router := mux.NewRouter().StrictSlash(true)
